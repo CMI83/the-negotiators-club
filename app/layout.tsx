@@ -1,6 +1,8 @@
 import "./globals.css";
 import Link from "next/link";
-import MemberstackInit from "@/components/MemberstackInit";
+import dynamic from "next/dynamic";
+const MemberstackInit = dynamic(() => import("@/components/MemberstackInit"), { ssr: false });
+
 
 export const metadata = {
   title: "The Negotiators Club – A Circle of Minds Who Negotiate Differently.",
