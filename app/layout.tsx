@@ -1,5 +1,6 @@
 import "./globals.css";
 import Link from "next/link";
+import Script from "next/script";
 
 export const metadata = {
   title: "The Negotiators Club – A Circle of Minds Who Negotiate Differently.",
@@ -10,18 +11,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de">
       <head>
-        {/* Memberstack: Browser-only Einbindung */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: "window.MemberStack = window.MemberStack || { onReady: [] }",
-          }}
-        />
-        <script
-          src="https://api.memberstack.com/v2/memberstack.js?custom"
+        {/* Memberstack Bootstrap (muss VOR dem Script da sein) */}
+        <Script id="ms-bootstrap" strategy="beforeInteractive">
+          {`window.MemberStack = window.MemberStack || { onReady: [] };`}
+        </Script>
+
+        {/* Memberstack Library */}
+        <Script
+          id="ms-lib"
+          src="https://api.memberstack.com/v2/memberstack.js"
           data-memberstack-app="pk_89825d0662d17a373e2b"
-          defer
+          strategy="afterInteractive"
         />
       </head>
+
       <body className="antialiased text-slate-800">
         <header className="fixed inset-x-0 top-0 z-50">
           <nav className="container">
@@ -56,6 +59,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </div>
         </footer>
+
+        {/* Fallback: wenn das Auto-Binding von Memberstack mal nicht greift */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(function attachMSCheckout(){
+  function bind(){
+    var ms = window.MemberStack;
+    if(!ms || !ms.openCheckout){ return setTimeout(bind, 300); }
+    document.querySelectorAll('[data-ms-checkout]').forEach(function(btn){
+      if(btn.__msBound) return;
+      btn.__msBound = true;
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        var plan = btn.getAttribute('data-ms-checkout');
+        try { ms.openCheckout({ plans: [plan] }); } catch(_) {}
+      });
+    });
+  }
+  bind();
+})();`,
+          }}
+        />
       </body>
     </html>
   );
