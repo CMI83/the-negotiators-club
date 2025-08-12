@@ -30,6 +30,7 @@ export default function Page() {
             <div className="text-sm text-slate-500">pro Monat · monatlich kündbar</div>
           </div>
 
+          {/* Memberstack Checkout */}
           <button
             type="button"
             data-ms-checkout="pln_open-circle-fee-ec8b0no6"
