@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; }
+.container { @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8; }
+.card { @apply rounded-2xl bg-white shadow-soft border border-slate-100; }
+.link { @apply underline font-semibold; }
+
+:root { --brand: #06213C; }
+body { font-family: "Helvetica Neue", Helvetica, Arial, ui-sans-serif, system-ui; }
+a { color: var(--brand); }
+button { background: var(--brand); color: white; }
