@@ -1,4 +1,13 @@
 "use client";
 import { useEffect } from "react";
-import memberstackDOM from "@memberstack/dom";
-export default function MemberstackInit(){ useEffect(()=>{ memberstackDOM.init({ publicKey: "pk_89825d0662d17a373e2b" }); },[]); return null; }
+
+export default function MemberstackInit() {
+  useEffect(() => {
+    // Nur im Browser laden, nie beim Server-Build
+    (async () => {
+      const memberstackDOM = (await import("@memberstack/dom")).default;
+      memberstackDOM.init({ publicKey: "pk_89825d0662d17a373e2b" });
+    })();
+  }, []);
+  return null;
+}
