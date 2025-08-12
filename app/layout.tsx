@@ -1,19 +1,28 @@
 import "./globals.css";
 import Link from "next/link";
-import dynamic from "next/dynamic";
-const MemberstackInit = dynamic(() => import("@/components/MemberstackInit"), { ssr: false });
-
 
 export const metadata = {
   title: "The Negotiators Club – A Circle of Minds Who Negotiate Differently.",
-  description: "Open & Inner membership for people who negotiate differently."
+  description: "Open & Inner membership for people who negotiate differently.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de">
+      <head>
+        {/* Memberstack: Browser-only Einbindung */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "window.MemberStack = window.MemberStack || { onReady: [] }",
+          }}
+        />
+        <script
+          src="https://api.memberstack.com/v2/memberstack.js?custom"
+          data-memberstack-app="pk_89825d0662d17a373e2b"
+          defer
+        />
+      </head>
       <body className="antialiased text-slate-800">
-        <MemberstackInit />
         <header className="fixed inset-x-0 top-0 z-50">
           <nav className="container">
             <div className="flex h-16 items-center justify-between rounded-2xl mt-3 px-3 bg-white/80 shadow-soft">
@@ -33,10 +42,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </nav>
         </header>
+
         <main className="pt-24">{children}</main>
+
         <footer className="container py-10">
           <div className="flex flex-col sm:flex-row gap-6 sm:items-center sm:justify-between">
-            <p className="text-sm text-slate-500">© {new Date().getFullYear()} The Negotiators Club</p>
+            <p className="text-sm text-slate-500">
+              © {new Date().getFullYear()} The Negotiators Club
+            </p>
             <div className="flex gap-4 text-sm">
               <Link href="/impressum" className="underline">Impressum</Link>
               <Link href="/datenschutz" className="underline">Datenschutz</Link>
